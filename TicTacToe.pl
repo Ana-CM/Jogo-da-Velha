@@ -14,8 +14,9 @@ inicio :-
     read(Modo),
     validar_modo(Modo),
     Colunas is Linhas + 1,
-    criar_tabuleiro(Linhas, Colunas).
-    %pede_jogada_desafiante(Linhas, Colunas, Modo).
+    criar_tabuleiro(Linhas, Colunas),
+    Rodada is 1,
+    pede_jogada_desafiante(Linhas, Colunas, Modo, Rodada).
 
 criar_tabuleiro(Linhas, Colunas) :-
     criar_tabuleiro_vazio(Linhas, Colunas, Tabuleiro). 
@@ -38,3 +39,41 @@ validar_linhas(Linhas) :-
 
 validar_modo(Modo) :-
     (Modo == 'N'; Modo == 'S').
+
+pede_jogada_desafiante(Linhas, Colunas, 'N', Rodada) :-
+    write('Digite a linha da jogada: '),
+    read(Linha),
+    write('Digite a coluna da jogada: '),
+    read(Coluna),
+    validar_jogada_normal(Linha, Linhas, Coluna, Colunas),
+    jogada_normal_desafiante(Linha, Coluna).
+    % verifica se o jogo acabou (validar rodada)
+    %TODO:  jogada normal computador
+    % verifica se o jogo acabou (validar rodada)
+    % Imprime o tabuleiro
+    % pede_jogada_desafiante(Linhas, Colunas, 'N').
+
+
+pede_jogada_desafiante(Linhas, Colunas, 'S', Rodada) :-
+    write('Digite a coluna da jogada: '),
+    read(Coluna),
+    validar_jogada_simples(Coluna, Colunas),
+    jogada_simples_desafiante(Coluna).
+    % verifica se o jogo acabou (validar rodada)
+    %TODO:  jogada normal computador
+    % verifica se o jogo acabou (validar rodada)
+    % Imprime o tabuleiro
+    % pede_jogada_desafiante(Linhas, Colunas, 'N').
+
+validar_jogada_normal(Linha, Linhas, Coluna, Colunas) :-
+    integer(Linha),
+    integer(Coluna),
+    Linha > 0,
+    Linha =< Linhas,
+    Coluna > 0,
+    Coluna =< Colunas.
+
+validar_jogada_simples(Coluna, Colunas) :-
+    integer(Coluna),
+    Coluna > 0,
+    Coluna =< Colunas.
