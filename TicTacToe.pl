@@ -43,7 +43,7 @@ criar_linha_vazia(Colunas, [null|LinhaAtualTabuleiro]) :-
 
 
 /**
- * Predicados relacionados as jogadas do desafiante.
+ * Predicados relacionados as jogadas do desafiante no modo Normal.
  */
 pede_jogada_desafiante(Linhas, Colunas, 'N', Rodada, Tabuleiro) :-
     write('Digite a linha da jogada: '),
@@ -51,25 +51,32 @@ pede_jogada_desafiante(Linhas, Colunas, 'N', Rodada, Tabuleiro) :-
     write('Digite a coluna da jogada: '),
     read(Coluna),
     validar_jogada_normal(Linha, Linhas, Coluna, Colunas),
-    jogada_normal_desafiante(Linha, Coluna).
+    jogada_normal_desafiante(Linha, Coluna, Tabuleiro).
     % verifica se o jogo acabou (validar rodada)
     %TODO:  jogada normal computador
     % verifica se o jogo acabou (validar rodada)
     % Imprime o tabuleiro
     % pede_jogada_desafiante(Linhas, Colunas, 'N').
 
+jogada_normal_desafiante(Linha, Coluna, Tabuleiro) :- !.
 
+
+
+/**
+ * Predicados relacionados as jogadas do desafiante no modo Simplificado.
+ */
 pede_jogada_desafiante(Linhas, Colunas, 'S', Rodada, Tabuleiro) :-
     write('Digite a coluna da jogada: '),
     read(Coluna),
     validar_jogada_simples(Coluna, Colunas),
-    jogada_simples_desafiante(Coluna).
+    jogada_simples_desafiante(Coluna, Tabuleiro).
     % verifica se o jogo acabou (validar rodada)
     %TODO:  jogada normal computador
     % verifica se o jogo acabou (validar rodada)
     % Imprime o tabuleiro
     % pede_jogada_desafiante(Linhas, Colunas, 'N').
 
+jogada_simples_desafiante(Coluna, Tabuleiro) :- !.
 
 /**
  * Predicados Relacionadas a validação de entradas.
@@ -94,3 +101,17 @@ validar_jogada_simples(Coluna, Colunas) :-
     Coluna > 0,
     Coluna =< Colunas.
 
+
+
+% Predicado TEMPORARIO para imprimir o tabuleiro. // REMOVER DEPOIS
+imprime_tabuleiro([]).
+imprime_tabuleiro([Linha|Resto]) :-
+    imprime_linha(Linha),
+    nl,
+    imprime_tabuleiro(Resto).
+
+imprime_linha([]) :- !.
+imprime_linha([Elemento|Resto]) :-
+    write('|'),
+    write(Elemento),
+    imprime_linha(Resto).
