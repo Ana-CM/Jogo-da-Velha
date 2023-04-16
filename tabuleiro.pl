@@ -1,4 +1,9 @@
 /**
+ * Ana Carolina Mendes Lino - 201865212AC
+ * Paula Rinco Rodrigues Pereira -
+ */
+
+/**
  * Predicados relacionadas a criação do tabuleiro.
  */
 criar_tabuleiro(Linhas, Colunas, Tabuleiro) :-

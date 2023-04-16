@@ -1,4 +1,9 @@
 /**
+ * Ana Carolina Mendes Lino - 201865212AC
+ * Paula Rinco Rodrigues Pereira -
+ */
+
+/**
  * Predicados relacionados as jogadas do desafiante no modo Simplificado.
  */
 pede_jogada_desafiante(Linhas, Colunas, s, Rodada, Tabuleiro) :-

@@ -1,4 +1,9 @@
 /**
+ * Ana Carolina Mendes Lino - 201865212AC
+ * Paula Rinco Rodrigues Pereira -
+ */
+
+/**
  * Predicados Relacionadas a validação de entradas.
  */
 validar_linhas(Linhas) :-
