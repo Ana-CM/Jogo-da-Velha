@@ -10,40 +10,69 @@ pede_jogada_desafiante(Linhas, Colunas, s, Rodada, Tabuleiro) :-
     write('Digite a coluna da jogada: '),
     read(Coluna),
     validar_jogada_simples(Coluna, Colunas),
-    jogada_simples_desafiante(Coluna, Tabuleiro),
-    imprime_tabuleiro(Tabuleiro).
+    jogada_simples_desafiante(Linhas, Coluna, Tabuleiro).
     % verifica se o jogo acabou (validar rodada)
     %TODO:  jogada normal computador
     % verifica se o jogo acabou (validar rodada)
     % Imprime o tabuleiro
     % pede_jogada_desafiante(Linhas, Colunas, 'N').
 
+jogada_simples_desafiante(Linhas, Coluna, [LinhaAtual|RestoTabuleiro]) :-
+    IndiceLinha is 1,
+    IndiceLinhas is Linhas + 1,
+    jogada_simples_desafiante_linha(IndiceLinhas, Coluna, IndiceLinha, LinhaAtual, RestoTabuleiro, TabuleiroAtualizado),
+    write('Tabuleiro Atualizado:'),
+    nl,
+    imprime_tabuleiro(TabuleiroAtualizado),
+    nl.
 
-jogada_simples_desafiante(Coluna, [LinhaAtual|RestoTabuleiro]) :-
-    jogada_simples_desafiante_linha(RestoTabuleiro, LinhaAtual, Coluna),
-    (Continuar == sim -> jogada_simples_desafiante_aux(Coluna, RestoTabuleiro, LinhaAtual); !).
+jogada_simples_desafiante_linha( Linhas, Coluna, IndiceLinha, Linha, Tabuleiro, TabuleiroAtualizado) :-
+    ColunaIndex is Coluna - 1, % Subtrai 1 de Coluna para obter o índice correto em Prolog
+    length(LinhaPrefixo, ColunaIndex),
+    append(LinhaPrefixo, [Valor|LinhaRestante], Linha),
 
-jogada_simples_desafiante_aux(_, [], _) :- !.
-jogada_simples_desafiante_aux(Coluna, [LinhaAtual|RestoTabuleiro], LinhaAnterior) :-
-    jogada_simples_desafiante_linha(RestoTabuleiro, LinhaAtual, Coluna, Continuar),
-    (
-        Continuar == sim ->
-        apaga_jogada_simples_anterior(Coluna, LinhaAnterior),
-        jogada_simples_desafiante_aux(Coluna, RestoTabuleiro, LinhaAtual),
-        LinhaAnterior = LinhaAtual
-        ; !
+    ( Valor \= x, Valor \= c, IndiceLinha < Linhas  -> 
+        append(LinhaPrefixo, [x|LinhaRestante], NovaLinha),
+        nth1(IndiceLinha, NovoTabuleiro, NovaLinha, Tabuleiro),
+
+        FimLinhas is Linhas - 1,
+
+        (IndiceLinha \= FimLinhas ->
+            IndiceLinhaProx is IndiceLinha + 1,
+            nth1(IndiceLinhaProx, NovoTabuleiro, ProxLinha)      
+        ;
+            ProxLinha = Linha      
+        ),
+        
+        %verica se o indice da linha é 1, se não for, chama o predicado apaga_jogada_simples_anterior
+        (IndiceLinha \= 1 -> 
+            IndiceLinhaAnt is IndiceLinha - 1,
+            nth1(IndiceLinhaAnt, NovoTabuleiro, AntLinha),
+            select(AntLinha, NovoTabuleiro, AntTabuleiro),
+            apaga_jogada_simples_anterior(Coluna, IndiceLinhaAnt, AntLinha, AntTabuleiro, NovoNovoTabuleiro),  
+    
+            length(ParteAntes, IndiceLinhaAnt),
+            append(ParteAntes, [_|ParteDepois], NovoNovoTabuleiro),
+            append(ParteAntes, ParteDepois, ProxTabuleiro)
+        ;
+            select(ProxLinha, NovoTabuleiro, ProxTabuleiro)
+        ),
+
+        
+        (IndiceLinha \= FimLinhas ->
+            jogada_simples_desafiante_linha(Linhas, Coluna, IndiceLinhaProx, ProxLinha, ProxTabuleiro, TabuleiroAtualizado)
+        ;
+            TabuleiroAtualizado = NovoTabuleiro
+        )
+    ; 
+        TabuleiroAtualizado = Tabuleiro
     ).
 
-jogada_simples_desafiante_linha(RestoTabuleiro, Linha, Coluna) :-
-    nth1(Coluna, Linha, Elemento),
-    (
-        Elemento =:= 0 ->
-        nth1(Coluna, Linha, 1, NovaLinha),
-        replace(Linha, Coluna, NovaLinha, NovaNovaLinha),
-        append([NovaNovaLinha], RestoTabuleiro, NovoTabuleiro),
-        Continuar = sim
-        ; Continuar = nao
-    ).
+apaga_jogada_simples_anterior( Coluna, IndiceLinha, Linha, Tabuleiro, NovoTabuleiro ) :-
+    ColunaIndex is Coluna - 1, % Subtrai 1 de Coluna para obter o índice correto em Prolog
+    length(LinhaPrefixo, ColunaIndex),
+    append(LinhaPrefixo, [_|LinhaRestante], Linha),
+    append(LinhaPrefixo, [0|LinhaRestante], NovaLinha),
+    nth1(IndiceLinha, NovoTabuleiro, NovaLinha, Tabuleiro).
 
-apaga_jogada_simples_anterior(Coluna, Linha) :-
-    nth1(Coluna, Linha, 0, NovaLinha).
+    
