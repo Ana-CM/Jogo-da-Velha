@@ -72,7 +72,10 @@ jogada_simples_desafiante_linha( Linhas, Coluna, IndiceLinha, Linha, Tabuleiro, 
             TabuleiroAtualizado = NovoTabuleiro
         )
     ; 
-        TabuleiroAtualizado = Tabuleiro
+        TabuleiroAtualizado = Tabuleiro,
+        write('Jogada inválida!'),
+        nl,
+        pede_jogada_desafiante(Linhas, Colunas, s, Rodada, Tabuleiro)
     ).
 
 apaga_jogada_simples_anterior( Coluna, IndiceLinha, Linha, Tabuleiro, NovoTabuleiro ) :-
