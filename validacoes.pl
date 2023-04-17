@@ -4,7 +4,7 @@
  */
 
 /**
- * Predicados Relacionadas a validação de entradas.
+ * Predicados Relacionadas a validações.
  */
 validar_linhas(Linhas) :-
     integer(Linhas),
@@ -25,3 +25,13 @@ validar_jogada_simples(Coluna, Colunas) :-
     integer(Coluna),
     Coluna > 0,
     Coluna =< Colunas.
+
+verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, Resultado) :-
+    (Rodada < Colunas ->
+        Resultado = continua
+    ;
+        % verifica_sequencia_horizontal(TabuleiroAtualizado, Linhas, Colunas, Resultado);
+        % verifica_sequencia_vertical(TabuleiroAtualizado, Linhas, Colunas, Resultado);
+        % verifica_sequencia_diagonal(TabuleiroAtualizado, Linhas, Colunas, Resultado)
+        Resultado = continua
+    ).
