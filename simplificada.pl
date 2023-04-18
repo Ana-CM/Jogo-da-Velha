@@ -6,12 +6,12 @@
 /**
  * Predicados relacionados as jogadas do desafiante no modo Simplificado.
  */
-pede_jogada_desafiante(Linhas, Colunas, s, Rodada, Tabuleiro) :-
+pede_jogada_simplificada(Linhas, Colunas, Rodada, Tabuleiro) :-
     write('Digite a coluna da jogada: '),
     read(Coluna),
     validar_jogada_simples(Coluna, Colunas),
     jogada_simples_desafiante(Linhas, Coluna, Tabuleiro, TabuleiroAtualizado),
-    verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, Resultado),
+    verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, x, Resultado),
     (Resultado = acabou -> 
         imprime_tabuleiro(TabuleiroAtualizado),
         nl,
@@ -75,7 +75,7 @@ jogada_simples_desafiante_linha( Linhas, Coluna, IndiceLinha, Linha, Tabuleiro, 
         TabuleiroAtualizado = Tabuleiro,
         write('Jogada inválida!'),
         nl,
-        pede_jogada_desafiante(Linhas, Colunas, s, Rodada, Tabuleiro)
+        pede_jogada_simplificada(Linhas, Colunas, Rodada, Tabuleiro)
     ).
 
 apaga_jogada_simples_anterior( Coluna, IndiceLinha, Linha, Tabuleiro, NovoTabuleiro ) :-

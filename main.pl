@@ -6,7 +6,11 @@
 /**
  * Importa a biblioteca XPCE para exibir o tabuleiro.
  */
-:- use_module(library(pce)).
+%:- use_module(library(pce)).
+
+/**
+ * Importa os arquivos que contém os predicados utilizados.
+ */
 :- ensure_loaded(tabuleiro).
 :- ensure_loaded(validacoes).
 :- ensure_loaded(normal).
@@ -26,4 +30,9 @@ inicio :-
     Colunas is Linhas + 1,
     criar_tabuleiro(Linhas, Colunas, Tabuleiro),
     Rodada is 1,
-    pede_jogada_desafiante(Linhas, Colunas, Modo, Rodada, Tabuleiro).
+    (
+        Modo == 'n' -> 
+            pede_jogada_normal(Linhas, Colunas, Rodada, Tabuleiro);
+        Modo == 's' ->
+            pede_jogada_simplificada(Linhas, Colunas, Rodada, Tabuleiro)
+    ).
