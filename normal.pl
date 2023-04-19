@@ -12,10 +12,9 @@ pede_jogada_normal(Linhas, Colunas, Rodada, Tabuleiro) :-
     write('Digite a coluna da jogada: '),
     read(Coluna),
     validar_jogada_normal(Linha, Linhas, Coluna, Colunas),
-    jogada_normal_desafiante(Linha, Coluna, Tabuleiro, TabuleiroAtualizado),
+    jogada_normal_desafiante(Linhas, Colunas, Rodada, Linha, Coluna, Tabuleiro, TabuleiroAtualizado),
 
     verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, Linha, Coluna, 'x', Resultado),
-    write('Resultado: '), write(Resultado), nl,
 
     %verifica se resultado é igual a acabou
     ( Resultado = 'acabou' ->
@@ -35,7 +34,7 @@ pede_jogada_normal(Linhas, Colunas, Rodada, Tabuleiro) :-
         pede_jogada_normal(Linhas, Colunas, NovaRodada, TabuleiroAtualizado)
     ).
 
-jogada_normal_desafiante(Linha, Coluna, Tabuleiro, TabuleiroAtualizado) :-  
+jogada_normal_desafiante(Linhas, Colunas, Rodada, Linha, Coluna, Tabuleiro, TabuleiroAtualizado) :-  
     IndiceLinha is Linha - 1,
     length(LinhaPrefixo, IndiceLinha),
     append(LinhaPrefixo, [LinhaSelecionada|TabuleiroRestante], Tabuleiro),

@@ -10,30 +10,31 @@ pede_jogada_simplificada(Linhas, Colunas, Rodada, Tabuleiro) :-
     write('Digite a coluna da jogada: '),
     read(Coluna),
     validar_jogada_simples(Coluna, Colunas),
-    jogada_simples_desafiante(Linhas, Coluna, Tabuleiro, TabuleiroAtualizado),
+    jogada_simples_desafiante(Colunas, Rodada, Linhas, Coluna, Tabuleiro, TabuleiroAtualizado),
+    imprime_tabuleiro(TabuleiroAtualizado).
     %verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, 'x', Resultado),
-    (Resultado = acabou -> 
-        imprime_tabuleiro(TabuleiroAtualizado),
-        nl,
-        write('O desafiante venceu!'),
-        nl
-    ;
-        write('Tabuleiro Atualizado:'),
-        nl,
-        imprime_tabuleiro(TabuleiroAtualizado),
-        nl
-        %TODO:  jogada normal computador
-        % verifica se o jogo acabou (validar rodada)
-        % Imprime o tabuleiro
-        % pede_jogada_desafiante(Linhas, Colunas, 'N').
-    ).
+    % (Resultado = acabou -> 
+    %     imprime_tabuleiro(TabuleiroAtualizado),
+    %     nl,
+    %     write('O desafiante venceu!'),
+    %     nl
+    % ;
+    %     write('Tabuleiro Atualizado:'),
+    %     nl,
+    %     imprime_tabuleiro(TabuleiroAtualizado),
+    %     nl
+    %     %TODO:  jogada normal computador
+    %     % verifica se o jogo acabou (validar rodada)
+    %     % Imprime o tabuleiro
+    %     % pede_jogada_desafiante(Linhas, Colunas, 'N').
+    % ).
 
-jogada_simples_desafiante(Linhas, Coluna, [LinhaAtual|RestoTabuleiro], TabuleiroAtualizado) :-
+jogada_simples_desafiante(Colunas, Rodada, Linhas, Coluna, [LinhaAtual|RestoTabuleiro], TabuleiroAtualizado) :-
     IndiceLinha is 1,
     IndiceLinhas is Linhas + 1,
-    jogada_simples_desafiante_linha(IndiceLinhas, Coluna, IndiceLinha, LinhaAtual, RestoTabuleiro, TabuleiroAtualizado).
+    jogada_simples_desafiante_linha( Colunas, Rodada, IndiceLinhas, Coluna, IndiceLinha, LinhaAtual, RestoTabuleiro, TabuleiroAtualizado).
 
-jogada_simples_desafiante_linha( Linhas, Coluna, IndiceLinha, Linha, Tabuleiro, TabuleiroAtualizado) :-
+jogada_simples_desafiante_linha( Colunas, Rodada, Linhas, Coluna, IndiceLinha, Linha, Tabuleiro, TabuleiroAtualizado) :-
     ColunaIndex is Coluna - 1, % Subtrai 1 de Coluna para obter o índice correto em Prolog
     length(LinhaPrefixo, ColunaIndex),
     append(LinhaPrefixo, [Valor|LinhaRestante], Linha),
@@ -67,7 +68,7 @@ jogada_simples_desafiante_linha( Linhas, Coluna, IndiceLinha, Linha, Tabuleiro, 
 
         
         (IndiceLinha \= FimLinhas ->
-            jogada_simples_desafiante_linha(Linhas, Coluna, IndiceLinhaProx, ProxLinha, ProxTabuleiro, TabuleiroAtualizado)
+            jogada_simples_desafiante_linha(Colunas, Rodada, Linhas, Coluna, IndiceLinhaProx, ProxLinha, ProxTabuleiro, TabuleiroAtualizado)
         ;
             TabuleiroAtualizado = NovoTabuleiro
         )

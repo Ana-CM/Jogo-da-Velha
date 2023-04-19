@@ -29,28 +29,49 @@ validar_jogada_simples(Coluna, Colunas) :-
 /**
  * Valida se o jogo acabou.
  */
-verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, Linha, Coluna, Simbolo, Resultado) :-
+verifica_se_acabou(Rodada, Tabuleiro, Linhas, Colunas, Linha, Coluna, Simbolo, Resultado) :-
     (Rodada < Linhas ->
         Resultado = 'continua'
     ;
-        %verifica_sequencia_horizontal(Tabuleiro, Linhas, Colunas, Simbolo, Linhas, Resultado)
+        verifica_sequencia_horizontal(Tabuleiro, Colunas, Simbolo, Linhas, Linha, Resultado)
         %verifica_sequencia_vertical(Tabuleiro, Linhas, Colunas, Simbolo, Colunas, Resultado)
         %verifica_sequencia_diagonal(Tabuleiro, Linhas, Colunas, Simbolo, Resultado)
+    ).
+
+verifica_sequencia_horizontal(Tabuleiro, Colunas, Simbolo, Final, Linha, Resultado) :-
+    verifica_sequencia_horizontal_aux(Tabuleiro, Colunas, 1, Simbolo, Linha, 0, Final, Quantidade),
+    (Quantidade >= Final ->
+        Resultado = 'acabou'
+    ;
         Resultado = 'continua'
     ).
 
+verifica_sequencia_horizontal_aux(Tabuleiro, Colunas, ColunaInicial, Simbolo, Linha, Contador, Final, Quantidade) :-
+    (ColunaInicial =< Colunas, Contador < Final ->
+        get_elemento(Tabuleiro, Linha, ColunaInicial, Simbolo, Resultado),
+        (Resultado = 'true' ->
+            ContadorAux is Contador + 1,
+            ColunaInicialAux is ColunaInicial + 1,
+            verifica_sequencia_horizontal_aux(Tabuleiro, Colunas, ColunaInicialAux, Simbolo, Linha, ContadorAux, Final, Quantidade)
+        ;
+            ColunaInicialAux is ColunaInicial + 1,
+            verifica_sequencia_horizontal_aux(Tabuleiro, Colunas, ColunaInicialAux, Simbolo, Linha, 0, Final, Quantidade)
+        )
+    ;
+        Quantidade = Contador
+    ).
 
 get_elemento(Tabuleiro, Linha, Coluna, Simbolo, Resultado) :-
     IndiceLinha is Linha - 1,
     length(LinhaPrefixo, IndiceLinha),
-    append(LinhaPrefixo, [LinhaSelecionada|TabuleiroRestante], Tabuleiro),
+    append(LinhaPrefixo, [LinhaSelecionada|_], Tabuleiro),
 
     IndiceColuna is Coluna - 1,
     length(ColunaPrefixo, IndiceColuna),
-    append(ColunaPrefixo, [Valor|LinhaRestante], LinhaSelecionada),
+    append(ColunaPrefixo, [Valor|_], LinhaSelecionada),
 
     (Valor = Simbolo ->
-        Resultado = true
+        Resultado = 'true'
     ;
-        Resultado = false
+        Resultado = 'false'
     ).
