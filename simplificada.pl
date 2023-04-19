@@ -11,7 +11,7 @@ pede_jogada_simplificada(Linhas, Colunas, Rodada, Tabuleiro) :-
     read(Coluna),
     validar_jogada_simples(Coluna, Colunas),
     jogada_simples_desafiante(Linhas, Coluna, Tabuleiro, TabuleiroAtualizado),
-    verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, x, Resultado),
+    verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, 'x', Resultado),
     (Resultado = acabou -> 
         imprime_tabuleiro(TabuleiroAtualizado),
         nl,
@@ -38,8 +38,8 @@ jogada_simples_desafiante_linha( Linhas, Coluna, IndiceLinha, Linha, Tabuleiro, 
     length(LinhaPrefixo, ColunaIndex),
     append(LinhaPrefixo, [Valor|LinhaRestante], Linha),
 
-    ( Valor \= x, Valor \= c, IndiceLinha < Linhas  -> 
-        append(LinhaPrefixo, [x|LinhaRestante], NovaLinha),
+    ( Valor \= 'x', Valor \= 'c', IndiceLinha < Linhas  -> 
+        append(LinhaPrefixo, ['x'|LinhaRestante], NovaLinha),
         nth1(IndiceLinha, NovoTabuleiro, NovaLinha, Tabuleiro),
 
         FimLinhas is Linhas - 1,

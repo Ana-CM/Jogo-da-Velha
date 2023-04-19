@@ -14,11 +14,11 @@ pede_jogada_normal(Linhas, Colunas, Rodada, Tabuleiro) :-
     validar_jogada_normal(Linha, Linhas, Coluna, Colunas),
     jogada_normal_desafiante(Linha, Coluna, Tabuleiro, TabuleiroAtualizado),
 
-    verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, x, Resultado),
+    verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, 'x', Resultado),
     write('Resultado: '), write(Resultado), nl,
 
     %verifica se resultado é igual a acabou
-    ( Resultado = acabou ->
+    ( Resultado = 'acabou' ->
         imprime_tabuleiro(TabuleiroAtualizado),
         nl,
         write('O desafiante venceu!'),
@@ -44,8 +44,8 @@ jogada_normal_desafiante(Linha, Coluna, Tabuleiro, TabuleiroAtualizado) :-
     length(ColunaPrefixo, IndiceColuna),
     append(ColunaPrefixo, [Valor|LinhaRestante], LinhaSelecionada),
 
-    ( Valor \= x, Valor \= c ->
-        append(ColunaPrefixo, [x|LinhaRestante], NovaLinha),
+    ( Valor \= 'x', Valor \= 'c' ->
+        append(ColunaPrefixo, ['x'|LinhaRestante], NovaLinha),
         append(LinhaPrefixo, [NovaLinha|TabuleiroRestante], NovoTabuleiro),
         TabuleiroAtualizado = NovoTabuleiro
     ;
