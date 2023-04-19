@@ -11,7 +11,7 @@ pede_jogada_simplificada(Linhas, Colunas, Rodada, Tabuleiro) :-
     read(Coluna),
     validar_jogada_simples(Coluna, Colunas),
     jogada_simples_desafiante(Linhas, Coluna, Tabuleiro, TabuleiroAtualizado),
-    verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, 'x', Resultado),
+    %verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, 'x', Resultado),
     (Resultado = acabou -> 
         imprime_tabuleiro(TabuleiroAtualizado),
         nl,

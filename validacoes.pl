@@ -29,51 +29,16 @@ validar_jogada_simples(Coluna, Colunas) :-
 /**
  * Valida se o jogo acabou.
  */
-verifica_se_acabou(Rodada, Tabuleiro, Linhas, Colunas, Simbolo, Resultado) :-
+verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, Linha, Coluna, Simbolo, Resultado) :-
     (Rodada < Linhas ->
         Resultado = 'continua'
     ;
-        verifica_sequencia_horizontal(Tabuleiro, Linhas, Colunas, Simbolo, Linhas, Resultado),
-        (Resultado = 'continua' ->
-            verifica_sequencia_vertical(Tabuleiro, Linhas, Colunas, Simbolo, Linhas, Resultado)
-            % verifica_sequencia_diagonal(TabuleiroAtualizado, Linhas, Colunas, Resultado)
-        ;
-            Resultado = 'acabou'
-        )
+        %verifica_sequencia_horizontal(Tabuleiro, Linhas, Colunas, Simbolo, Linhas, Resultado)
+        %verifica_sequencia_vertical(Tabuleiro, Linhas, Colunas, Simbolo, Colunas, Resultado)
+        %verifica_sequencia_diagonal(Tabuleiro, Linhas, Colunas, Simbolo, Resultado)
+        Resultado = 'continua'
     ).
 
-verifica_sequencia_horizontal(Tabuleiro, Linhas, Colunas, Simbolo, Final, Resultado) :-
-    verifica_sequencia_horizontal_aux(Tabuleiro, Linhas, Colunas, Simbolo, Final, 1, 1, 0, Resultado).
-
-verifica_sequencia_horizontal_aux(Tabuleiro, Linhas, Colunas, Simbolo, Final, Linha, Coluna, Contador, Resultado) :-
-    (Final > Contador -> 
-        (Linha =< Linhas -> 
-            (Coluna =< Colunas -> 
-                get_elemento(Tabuleiro, Linha, Coluna, Simbolo, Igual),
-
-                ( Igual -> 
-                    ContadorAtualizado is Contador + 1,
-                    ColunaAtualizada is Coluna + 1,
-                    verifica_sequencia_horizontal_aux(Tabuleiro, Linhas, Colunas, Simbolo, Final, Linha, ColunaAtualizada, ContadorAtualizado, Resultado)
-                ;
-                    ( Colunas - Coluna >= Final ->
-                        ColunaAtualizada is Coluna + 1,
-                        verifica_sequencia_horizontal_aux(Tabuleiro, Linhas, Colunas, Simbolo, Final, Linha, ColunaAtualizada, 0, Resultado)
-                    ;
-                        LinhaAtualizada is Linha + 1,
-                        verifica_sequencia_horizontal_aux(Tabuleiro, Linhas, Colunas, Simbolo, Final, LinhaAtualizada, 1, 0, Resultado)
-                    )
-                )
-            ;
-                LinhaAtualizada is Linha + 1,
-                verifica_sequencia_horizontal_aux(Tabuleiro, Linhas, Colunas, Simbolo, Final, LinhaAtualizada, 1, 0, Resultado)
-            )
-        ;
-            Resultado = 'continua'
-        )
-    ;
-        Resultado = 'acabou'
-    ).
 
 get_elemento(Tabuleiro, Linha, Coluna, Simbolo, Resultado) :-
     IndiceLinha is Linha - 1,

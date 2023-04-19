@@ -14,7 +14,7 @@ pede_jogada_normal(Linhas, Colunas, Rodada, Tabuleiro) :-
     validar_jogada_normal(Linha, Linhas, Coluna, Colunas),
     jogada_normal_desafiante(Linha, Coluna, Tabuleiro, TabuleiroAtualizado),
 
-    verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, 'x', Resultado),
+    verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, Linha, Coluna, 'x', Resultado),
     write('Resultado: '), write(Resultado), nl,
 
     %verifica se resultado é igual a acabou
