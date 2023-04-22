@@ -33,7 +33,12 @@ verifica_se_acabou(Rodada, Tabuleiro, Linhas, Colunas, Linha, Coluna, Simbolo, R
     (Rodada < Linhas ->
         Resultado = 'continua'
     ;
-        verifica_sequencias(Tabuleiro, Colunas, Coluna, Simbolo, Linhas, Linhas, Linha, Resultado)
+        verifica_empate(Tabuleiro, Linhas, Colunas, ResultadoEmpate),
+        (ResultadoEmpate = 'empate' ->
+            Resultado = 'empate'
+        ;
+            verifica_sequencias(Tabuleiro, Colunas, Coluna, Simbolo, Linhas, Linhas, Linha, Resultado)
+        )
     ).
 
 verifica_sequencias(Tabuleiro, Colunas, Coluna, Simbolo, Final, Linhas, Linha, Resultado) :-
@@ -179,6 +184,29 @@ verifica_sequencia_diagonal_principal_aux(Tabuleiro, Colunas, Linhas, Simbolo, L
     ;
         Quantidade = Contador
     ).
+
+verifica_empate(Tabuleiro, Linhas, Colunas, Resultado) :-
+    verifica_empate_aux(Tabuleiro, Linhas, Colunas, 1, 1, Resultado).
+
+verifica_empate_aux(Tabuleiro, Linhas, Colunas, Linha, Coluna, Resultado) :-
+    (Linha =< Linhas ->
+        get_elemento(Tabuleiro, Linha, Coluna, 0, NovoResultado),
+        (NovoResultado = 'true' ->
+            Resultado = 'continua'
+        ;
+            Coluna_1 is Coluna + 1,
+            (Coluna_1 =< Colunas ->
+                verifica_empate_aux(Tabuleiro, Linhas, Colunas, Linha, Coluna_1, Resultado)
+            ;
+                Linha_1 is Linha + 1,
+                verifica_empate_aux(Tabuleiro, Linhas, Colunas, Linha_1, 1, Resultado)
+            )
+        )
+    ;
+        Resultado = 'empate'
+    ).
+    
+
 
 get_elemento(Tabuleiro, Linha, Coluna, Simbolo, Resultado) :-
     IndiceLinha is Linha - 1,
