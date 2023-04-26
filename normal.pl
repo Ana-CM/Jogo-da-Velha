@@ -17,20 +17,20 @@ pede_jogada_normal(Linhas, Colunas, Rodada, Tabuleiro) :-
     verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, Linha, Coluna, 'x', Resultado),
 
     (Resultado = 'empate' -> 
-        imprime_tabuleiro(TabuleiroAtualizado),
+        imprime_tabuleiro(TabuleiroAtualizado, Linhas, Colunas),
         nl,
         write('Empate!'),
         nl
     ;
         ( Resultado = 'acabou' ->
-            imprime_tabuleiro(TabuleiroAtualizado),
+            imprime_tabuleiro(TabuleiroAtualizado, Linhas, Colunas),
             nl,
             write('O desafiante venceu!'),
             nl
         ;
             write('Tabuleiro Atualizado:'),
             nl,
-            imprime_tabuleiro(TabuleiroAtualizado),
+            imprime_tabuleiro(TabuleiroAtualizado, Linhas, Colunas),
             nl,
             %TODO:  jogada normal computador
             % verifica se o jogo acabou (validar rodada)

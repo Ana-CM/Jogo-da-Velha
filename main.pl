@@ -6,7 +6,7 @@
 /**
  * Importa a biblioteca XPCE para exibir o tabuleiro.
  */
-%:- use_module(library(pce)).
+:- use_module(library(pce)).
 
 /**
  * Importa os arquivos que contém os predicados utilizados.
