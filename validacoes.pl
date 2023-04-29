@@ -205,20 +205,4 @@ verifica_empate_aux(Tabuleiro, Linhas, Colunas, Linha, Coluna, Resultado) :-
     ;
         Resultado = 'empate'
     ).
-    
 
-
-get_elemento(Tabuleiro, Linha, Coluna, Simbolo, Resultado) :-
-    IndiceLinha is Linha - 1,
-    length(LinhaPrefixo, IndiceLinha),
-    append(LinhaPrefixo, [LinhaSelecionada|_], Tabuleiro),
-
-    IndiceColuna is Coluna - 1,
-    length(ColunaPrefixo, IndiceColuna),
-    append(ColunaPrefixo, [Valor|_], LinhaSelecionada),
-
-    (Valor = Simbolo ->
-        Resultado = 'true'
-    ;
-        Resultado = 'false'
-    ).

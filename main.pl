@@ -11,6 +11,7 @@
 /**
  * Importa os arquivos que contém os predicados utilizados.
  */
+:- ensure_loaded(utils).
 :- ensure_loaded(tabuleiro).
 :- ensure_loaded(validacoes).
 :- ensure_loaded(normal).
