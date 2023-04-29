@@ -28,9 +28,9 @@ pede_jogada_simplificada(Linhas, Colunas, Rodada, Tabuleiro) :-
             nl,
             imprime_tabuleiro(TabuleiroAtualizado),
             nl,
-            jogada_simples_computador(Rodada, Colunas, Linhas, TabuleiroAtualizado, NovoTabuleiroAtualizado),
+            jogada_simples_computador(Colunas, Linhas, TabuleiroAtualizado, NovoTabuleiroAtualizado, NovaLinhaJogada, NovaColunaJogada),
             NovaRodada is Rodada + 1,
-            % verifica se o jogo acabou (validar rodada)
+            %verifica_se_acabou(NovaRodada, NovoTabuleiroAtualizado, Linhas, Colunas, LinhaJogada, Coluna, '0', Resultado),
             imprime_tabuleiro(NovoTabuleiroAtualizado).
             % pede_jogada_desafiante(Linhas, Colunas, 'N').
         )
@@ -99,24 +99,31 @@ apaga_jogada_simples_anterior( Coluna, IndiceLinha, Linha, Tabuleiro, NovoTabule
 /**
  * Predicados relacionados a jogada do computador no modo Simplificado.
  */
-jogada_simples_computador(Rodada, Colunas, Linhas, Tabuleiro, NovoTabuleiro) :- 
+jogada_simples_computador(Colunas, Linhas, Tabuleiro, NovoTabuleiro, LinhaJogada, ColunaJogada) :-
     write('Computador jogando...'),
     nl,
     sleep(1),
-    jogada_simples_compultador_aux(Rodada, Colunas, Colunas, Linhas, 1, Tabuleiro, 0, PosicaoLinha, PosicaoColuna).
+    jogada_simples_compultador_aux(Colunas, Linhas, Tabuleiro, 0, LinhaJogada, ColunaJogada),
+    set_elemento(Tabuleiro, LinhaJogada, ColunaJogada, 'o', NovoTabuleiro).
 
-jogada_simples_compultador_aux(Rodada, Colunas, Coluna, Linhas, Linha, Tabuleiro, Heuristica, PosicaoLinha, PosicaoColuna) :-
-    (Linha =< Linhas ->
+jogada_simples_compultador_aux(Coluna, Linha, Tabuleiro, Heuristica, PosicaoLinha, PosicaoColuna) :-
+    (Coluna > 0 ->
         get_elemento(Tabuleiro, Linha, Coluna, 0, Resultado),
-        (Resultado = 'true' ->
-          %TODO: chamar heuristica  
+        (NovoResultado = 'true' ->
+            calcula_heuristica_simples(Coluna, Linha, Tabuleiro, NovaHeuristica),
+            (NovaHeuristica > Heuristica ->
+                jogada_simples_compultador_aux(Coluna, Linha, Tabuleiro, NovaHeuristica, Linha, Coluna)
+            )
         ;
-            Coluna_1 is Coluna - 1,
-            (Coluna_1 =< Colunas ->
-                jogada_simples_compultador_aux(Rodada, Colunas, Coluna_1, Linhas, Linha, Tabuleiro, Heuristica, PosicaoLinha, PosicaoColun)
+            Linha_1 is Linha - 1,
+            (Linha_1 > 0 ->
+                jogada_simples_compultador_aux(Coluna, Linha_1, Tabuleiro, Heuristica, PosicaoLinha, PosicaoColuna)
             ;
-                Linha_1 is Linha + 1,
-                jogada_simples_compultador_aux(Rodada, Colunas, Coluna, Linhas, Linha, Tabuleiro, Heuristica, PosicaoLinha, PosicaoColuna)
+                Coluna_1 is Coluna - 1,
+                jogada_simples_compultador_aux(Coluna_1, Linha, Tabuleiro, Heuristica, PosicaoLinha, PosicaoColuna)
             )
         )
     ).
+    
+calcula_heuristica_simples(Coluna, Linha, Tabuleiro, Heuristica) :- !.
+    
