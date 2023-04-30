@@ -6,124 +6,116 @@
 /**
  * Predicados relacionados as jogadas do desafiante no modo Simplificado.
  */
-pede_jogada_simplificada(Linhas, Colunas, Rodada, Tabuleiro) :-
+pede_jogada_simplificada(Window, Linhas, Colunas, Rodada, Tabuleiro) :-
     write('Digite a coluna da jogada: '),
     read(Coluna),
     validar_jogada_simples(Coluna, Colunas),
     jogada_simples_desafiante(Colunas, Rodada, Linhas, Coluna, Tabuleiro, LinhaJogada, TabuleiroAtualizado),
     verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, LinhaJogada, Coluna, 'x', Resultado),
+    write('Tabuleiro Atualizado:'),
+    nl,
+    imprime_tabuleiro(Window, TabuleiroAtualizado, Linhas, Colunas),
+    nl,
     (Resultado = 'empate' -> 
-        imprime_tabuleiro(TabuleiroAtualizado),
-        nl,
         write('Empate!'),
         nl
     ;
         (Resultado = 'acabou' -> 
-            imprime_tabuleiro(TabuleiroAtualizado),
-            nl,
             write('O desafiante venceu!'),
             nl
         ;
-            write('Tabuleiro Atualizado:'),
-            nl,
-            imprime_tabuleiro(TabuleiroAtualizado),
-            nl,
+            write('Computador jogando...'),
+            sleep(1),
             jogada_simples_computador(Colunas, Linhas, TabuleiroAtualizado, NovoTabuleiroAtualizado, NovaLinhaJogada, NovaColunaJogada),
             NovaRodada is Rodada + 1,
-            %verifica_se_acabou(NovaRodada, NovoTabuleiroAtualizado, Linhas, Colunas, LinhaJogada, Coluna, '0', Resultado),
-            imprime_tabuleiro(NovoTabuleiroAtualizado).
-            % pede_jogada_desafiante(Linhas, Colunas, 'N').
+            verifica_se_acabou(NovaRodada, NovoTabuleiroAtualizado, Linhas, Colunas, NovaLinhaJogada, NovaColunaJogada, 'o', NovoResultado),
+            imprime_tabuleiro(Window, NovoTabuleiroAtualizado, Linhas, Colunas),
+            nl,
+            (NovoResultado = 'empate' -> 
+                write('Empate!'),
+                nl
+            ;
+                (NovoResultado = 'acabou' -> 
+                    write('O computador venceu!'),
+                    nl
+                ;
+                    pede_jogada_simplificada(Window, Linhas, Colunas, NovaRodada, NovoTabuleiroAtualizado)
+                )
+            )
         )
     ).
 
-jogada_simples_desafiante(Colunas, Rodada, Linhas, Coluna, [LinhaAtual|RestoTabuleiro], Linha, TabuleiroAtualizado) :-
-    IndiceLinha is 1,
-    IndiceLinhas is Linhas + 1,
-    jogada_simples_desafiante_linha( Colunas, Rodada, IndiceLinhas, Coluna, IndiceLinha, LinhaAtual, RestoTabuleiro, Linha, TabuleiroAtualizado).
+jogada_simples_desafiante(Colunas, Rodada, Linhas, Coluna, Tabuleiro, LinhaJogada, TabuleiroAtualizado) :-
+    jogada_simples_desafiante_aux(Colunas, Rodada, Linhas, Coluna, Tabuleiro, Linhas, LinhaJogada, TabuleiroAtualizado).
 
-jogada_simples_desafiante_linha( Colunas, Rodada, Linhas, Coluna, IndiceLinha, Linha, Tabuleiro, LinhaJogada, TabuleiroAtualizado) :-
-    ColunaIndex is Coluna - 1, % Subtrai 1 de Coluna para obter o índice correto em Prolog
-    length(LinhaPrefixo, ColunaIndex),
-    append(LinhaPrefixo, [Valor|LinhaRestante], Linha),
-
-    ( Valor \= 'x', Valor \= 'c', IndiceLinha < Linhas  -> 
-        append(LinhaPrefixo, ['x'|LinhaRestante], NovaLinha),
-        nth1(IndiceLinha, NovoTabuleiro, NovaLinha, Tabuleiro),
-
-        FimLinhas is Linhas - 1,
-
-        (IndiceLinha \= FimLinhas ->
-            IndiceLinhaProx is IndiceLinha + 1,
-            nth1(IndiceLinhaProx, NovoTabuleiro, ProxLinha)      
+jogada_simples_desafiante_aux( Colunas, Rodada, Linhas, Coluna, Tabuleiro, Linha, LinhaJogada, TabuleiroAtualizado) :-
+   (Linha > 0 ->
+        get_elemento(Tabuleiro, Linha, Coluna, 0, Resultado),
+        (Resultado = 'true' ->
+            set_elemento(Tabuleiro, Linha, Coluna, 'x', NovoTabuleiro),
+            LinhaJogada is Linha,
+            TabuleiroAtualizado = NovoTabuleiro
         ;
-            ProxLinha = Linha      
-        ),
-        
-        %verica se o indice da linha é 1, se não for, chama o predicado apaga_jogada_simples_anterior
-        (IndiceLinha \= 1 -> 
-            IndiceLinhaAnt is IndiceLinha - 1,
-            nth1(IndiceLinhaAnt, NovoTabuleiro, AntLinha),
-            select(AntLinha, NovoTabuleiro, AntTabuleiro),
-            apaga_jogada_simples_anterior(Coluna, IndiceLinhaAnt, AntLinha, AntTabuleiro, NovoNovoTabuleiro),  
-    
-            length(ParteAntes, IndiceLinhaAnt),
-            append(ParteAntes, [_|ParteDepois], NovoNovoTabuleiro),
-            append(ParteAntes, ParteDepois, ProxTabuleiro)
-        ;
-            select(ProxLinha, NovoTabuleiro, ProxTabuleiro)
-        ),
-
-        
-        (IndiceLinha \= FimLinhas ->
-            jogada_simples_desafiante_linha(Colunas, Rodada, Linhas, Coluna, IndiceLinhaProx, ProxLinha, ProxTabuleiro, LinhaJogada, TabuleiroAtualizado)
-        ;
-            TabuleiroAtualizado = NovoTabuleiro,
-            LinhaJogada is IndiceLinha
+            Linha_1 is Linha - 1,
+            jogada_simples_desafiante_aux(Colunas, Rodada, Linhas, Coluna, Tabuleiro, Linha_1, LinhaJogada, TabuleiroAtualizado)
         )
-    ; 
-        TabuleiroAtualizado = Tabuleiro,
-        LinhaJogada is -1,
-        write('Jogada inválida!'),
+    ;
+        write('Erro! Jogada inválida!'),
         nl,
-        pede_jogada_simplificada(Linhas, Colunas, Rodada, Tabuleiro)
+        write('Digite a coluna da jogada: '),
+        read(NovaColuna),
+        validar_jogada_simples(NovaColuna, Colunas),
+        jogada_simples_desafiante(Colunas, Rodada, Linhas, NovaColuna, Tabuleiro, LinhaJogada, TabuleiroAtualizado)
     ).
 
-apaga_jogada_simples_anterior( Coluna, IndiceLinha, Linha, Tabuleiro, NovoTabuleiro ) :-
-    ColunaIndex is Coluna - 1, % Subtrai 1 de Coluna para obter o índice correto em Prolog
-    length(LinhaPrefixo, ColunaIndex),
-    append(LinhaPrefixo, [_|LinhaRestante], Linha),
-    append(LinhaPrefixo, [0|LinhaRestante], NovaLinha),
-    nth1(IndiceLinha, NovoTabuleiro, NovaLinha, Tabuleiro).
 
-    
 /**
  * Predicados relacionados a jogada do computador no modo Simplificado.
  */
 jogada_simples_computador(Colunas, Linhas, Tabuleiro, NovoTabuleiro, LinhaJogada, ColunaJogada) :-
-    write('Computador jogando...'),
-    nl,
-    sleep(1),
-    jogada_simples_compultador_aux(Colunas, Linhas, Tabuleiro, 0, LinhaJogada, ColunaJogada),
+    jogada_simples_computador_aux(Colunas, Linhas, 1, Linhas, Tabuleiro, 0, -1, -1, LinhaJogada, ColunaJogada),
     set_elemento(Tabuleiro, LinhaJogada, ColunaJogada, 'o', NovoTabuleiro).
 
-jogada_simples_compultador_aux(Coluna, Linha, Tabuleiro, Heuristica, PosicaoLinha, PosicaoColuna) :-
-    (Coluna > 0 ->
+jogada_simples_computador_aux(Colunas, Linhas, Coluna, Linha, Tabuleiro, Heuristica, AuxLinha, AuxColuna, PosicaoLinha, PosicaoColuna) :-
+    (Colunas >= Coluna ->
+        Linha_1 is Linha - 1,
+        Coluna_1 is Coluna + 1,
+
         get_elemento(Tabuleiro, Linha, Coluna, 0, Resultado),
-        (NovoResultado = 'true' ->
-            calcula_heuristica_simples(Coluna, Linha, Tabuleiro, NovaHeuristica),
+        (Resultado = 'true' ->
+            calcula_heuristica_simples(Colunas, Linhas, Coluna, Linha, Tabuleiro, NovaHeuristica),
             (NovaHeuristica > Heuristica ->
-                jogada_simples_compultador_aux(Coluna, Linha, Tabuleiro, NovaHeuristica, Linha, Coluna)
+                jogada_simples_computador_aux(Colunas, Linhas, Coluna_1, Linhas, Tabuleiro, NovaHeuristica, Linha, Coluna, PosicaoLinha, PosicaoColuna)
+            ;
+                jogada_simples_computador_aux(Colunas, Linhas, Coluna_1, Linhas, Tabuleiro, Heuristica, AuxLinha, AuxColuna, PosicaoLinha, PosicaoColuna)
             )
         ;
-            Linha_1 is Linha - 1,
             (Linha_1 > 0 ->
-                jogada_simples_compultador_aux(Coluna, Linha_1, Tabuleiro, Heuristica, PosicaoLinha, PosicaoColuna)
+                jogada_simples_computador_aux(Colunas, Linhas, Coluna, Linha_1, Tabuleiro, Heuristica, AuxLinha, AuxColuna, PosicaoLinha, PosicaoColuna)
             ;
-                Coluna_1 is Coluna - 1,
-                jogada_simples_compultador_aux(Coluna_1, Linha, Tabuleiro, Heuristica, PosicaoLinha, PosicaoColuna)
+                jogada_simples_computador_aux(Colunas, Linhas, Coluna_1, Linhas, Tabuleiro, Heuristica, AuxLinha, AuxColuna, PosicaoLinha, PosicaoColuna)
             )
+        )
+    ;   
+        ( AuxLinha < 0; AuxColuna < 0; AuxLinha > Linhas; AuxColuna > Colunas  ->
+            write('Erro ao calcular a jogada do computador!'),
+            nl,
+            fail
+        ;
+            PosicaoLinha is AuxLinha,
+            PosicaoColuna is AuxColuna
         )
     ).
     
-calcula_heuristica_simples(Coluna, Linha, Tabuleiro, Heuristica) :- !.
+calcula_heuristica_simples(Colunas, Linhas, Coluna, Linha, Tabuleiro, Heuristica) :- 
+    calcula_heuristica_posicao(Linhas, Colunas, Linha - 1, Coluna - 1, Tabuleiro, Heuristica1),
+    calcula_heuristica_posicao(Linhas, Colunas, Linha - 1, Coluna, Tabuleiro, Heuristica2),
+    calcula_heuristica_posicao(Linhas, Colunas, Linha - 1, Coluna + 1, Tabuleiro, Heuristica3),
+    calcula_heuristica_posicao(Linhas, Colunas, Linha, Coluna - 1, Tabuleiro, Heuristica4),
+    calcula_heuristica_posicao(Linhas, Colunas, Linha, Coluna + 1, Tabuleiro, Heuristica5),
+    calcula_heuristica_posicao(Linhas, Colunas, Linha + 1, Coluna - 1, Tabuleiro, Heuristica6),
+    calcula_heuristica_posicao(Linhas, Colunas, Linha + 1, Coluna, Tabuleiro, Heuristica7),
+    calcula_heuristica_posicao(Linhas, Colunas, Linha + 1, Coluna + 1, Tabuleiro, Heuristica8),
+    Heuristica is Heuristica1 + Heuristica2 + Heuristica3 + Heuristica4 + Heuristica5 + Heuristica6 + Heuristica7 + Heuristica8.
+
     

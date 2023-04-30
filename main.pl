@@ -30,10 +30,14 @@ inicio :-
     validar_modo(Modo),
     Colunas is Linhas + 1,
     criar_tabuleiro(Linhas, Colunas, Tabuleiro),
+    new(Window, picture('Jogo da Velha')),
+    SizeHeight is Linhas * 100,
+    SizeWidth is Colunas *100,
+    send(Window, size, size(SizeWidth, SizeHeight)),
     Rodada is 1,
     (
         Modo == 'n' -> 
-            pede_jogada_normal(Linhas, Colunas, Rodada, Tabuleiro);
+            pede_jogada_normal(Window, Linhas, Colunas, Rodada, Tabuleiro);
         Modo == 's' ->
-            pede_jogada_simplificada(Linhas, Colunas, Rodada, Tabuleiro)
+            pede_jogada_simplificada(Window, Linhas, Colunas, Rodada, Tabuleiro)
     ).

@@ -6,7 +6,7 @@
 /**
  * Predicados relacionados as jogadas do desafiante no modo Normal.
  */
-pede_jogada_normal(Linhas, Colunas, Rodada, Tabuleiro) :-
+pede_jogada_normal(Window, Linhas, Colunas, Rodada, Tabuleiro) :-
     write('Digite a linha da jogada: '),
     read(Linha),
     write('Digite a coluna da jogada: '),
@@ -15,28 +15,21 @@ pede_jogada_normal(Linhas, Colunas, Rodada, Tabuleiro) :-
     jogada_normal_desafiante(Linhas, Colunas, Rodada, Linha, Coluna, Tabuleiro, TabuleiroAtualizado),
 
     verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, Linha, Coluna, 'x', Resultado),
-
+    imprime_tabuleiro(Window, TabuleiroAtualizado, Linhas, Colunas),
+    nl,
     (Resultado = 'empate' -> 
-        imprime_tabuleiro(TabuleiroAtualizado, Linhas, Colunas),
-        nl,
         write('Empate!'),
         nl
     ;
         ( Resultado = 'acabou' ->
-            imprime_tabuleiro(TabuleiroAtualizado, Linhas, Colunas),
-            nl,
             write('O desafiante venceu!'),
             nl
         ;
-            write('Tabuleiro Atualizado:'),
-            nl,
-            imprime_tabuleiro(TabuleiroAtualizado, Linhas, Colunas),
-            nl,
             %TODO:  jogada normal computador
             % verifica se o jogo acabou (validar rodada)
             % Imprime o tabuleiro
             NovaRodada is Rodada + 1,
-            pede_jogada_normal(Linhas, Colunas, NovaRodada, TabuleiroAtualizado)
+            pede_jogada_normal(Window, Linhas, Colunas, NovaRodada, TabuleiroAtualizado)
         )
     ).
 
@@ -49,15 +42,19 @@ jogada_normal_desafiante(Linhas, Colunas, Rodada, Linha, Coluna, Tabuleiro, Tabu
     length(ColunaPrefixo, IndiceColuna),
     append(ColunaPrefixo, [Valor|LinhaRestante], LinhaSelecionada),
 
-    ( Valor \= 'x', Valor \= 'c' ->
+    ( Valor \= 'x', Valor \= 'o' ->
         append(ColunaPrefixo, ['x'|LinhaRestante], NovaLinha),
         append(LinhaPrefixo, [NovaLinha|TabuleiroRestante], NovoTabuleiro),
         TabuleiroAtualizado = NovoTabuleiro
     ;
         write('Jogada invalida!'),
         nl,
-        TabuleiroAtualizado = Tabuleiro,
-        pede_jogada_normal(Linhas, Colunas, Rodada, Tabuleiro)
+        write('Digite a linha da jogada: '),
+        read(NovaLinha),
+        write('Digite a coluna da jogada: '),
+        read(NovaColuna),
+        validar_jogada_normal(NovaLinha, Linhas, NovaColuna, Colunas),
+        jogada_normal_desafiante(Linhas, Colunas, Rodada, NovaLinha, NovaColuna, Tabuleiro, TabuleiroAtualizado)
     ).
         
         

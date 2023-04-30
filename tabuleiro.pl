@@ -23,11 +23,7 @@ criar_linha_vazia(Colunas, [0|LinhaAtualTabuleiro]) :-
 /**
   * Predicados usando a biblioteca de interface gráfica, XPCE, para desenhar o tabuleiro.
   */
-imprime_tabuleiro(Tabuleiro, NumeroLinhas, NumeroColunas) :-
-    new(Window, picture('Jogo da Velha')),
-    SizeHeight is NumeroLinhas * 100,
-    SizeWidth is NumeroColunas *100,
-    send(Window, size, size(SizeWidth, SizeHeight)),
+imprime_tabuleiro(Window, Tabuleiro, NumeroLinhas, NumeroColunas) :-
     draw_board(Window, Tabuleiro, NumeroLinhas, NumeroColunas, 1, 1),
     send(Window, open).
 

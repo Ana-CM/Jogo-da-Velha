@@ -29,7 +29,7 @@ get_elemento(Tabuleiro, Linha, Coluna, Simbolo, Resultado) :-
 /**
  * Seta o elemento de uma determinada posição do tabuleiro.
  */
-set_elemento(Tabuleiro, Linha, Coluna, Simbolo, NovoTabuleiro) :-
+set_elemento(Tabuleiro, Linha, Coluna, Simbolo, TabuleiroAtualizado) :-
     IndiceLinha is Linha - 1,
     length(LinhaPrefixo, IndiceLinha),
     append(LinhaPrefixo, [LinhaSelecionada|LinhaSufixo], Tabuleiro),
@@ -39,14 +39,15 @@ set_elemento(Tabuleiro, Linha, Coluna, Simbolo, NovoTabuleiro) :-
     append(ColunaPrefixo, [_|ColunaSufixo], LinhaSelecionada),
 
     append(ColunaPrefixo, [Simbolo|ColunaSufixo], NovaLinhaSelecionada),
-    append(LinhaPrefixo, [NovaLinhaSelecionada|LinhaSufixo], NovoTabuleiro).
+    append(LinhaPrefixo, [NovaLinhaSelecionada|LinhaSufixo], NovoTabuleiro),
+    TabuleiroAtualizado = NovoTabuleiro.
 
 /**
  * Retorna o valor da heurística de uma determinada posição do tabuleiro.
  */
-calcula_heuristica_posicao(Linhas, Colunas, Linha, Coluna, Simbolo, Tabuleiro, Heuristica) :-
+calcula_heuristica_posicao(Linhas, Colunas, Linha, Coluna, Tabuleiro, Heuristica) :-
     ( Linha > 0, Coluna > 0, Linha =< Linhas, Coluna =< Colunas ->
-        get_elemento(Tabuleiro, Linha, Coluna, Simbolo, Resultado),
+        get_elemento(Tabuleiro, Linha, Coluna, 'o', Resultado),
         ( Resultado = 'true' ->
             Heuristica is 3
         ;
