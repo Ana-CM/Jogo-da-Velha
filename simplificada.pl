@@ -12,8 +12,6 @@ pede_jogada_simplificada(Window, Linhas, Colunas, Rodada, Tabuleiro) :-
     validar_jogada_simples(Coluna, Colunas),
     jogada_simples_desafiante(Colunas, Rodada, Linhas, Coluna, Tabuleiro, LinhaJogada, TabuleiroAtualizado),
     verifica_se_acabou(Rodada, TabuleiroAtualizado, Linhas, Colunas, LinhaJogada, Coluna, 'x', Resultado),
-    write('Tabuleiro Atualizado:'),
-    nl,
     imprime_tabuleiro(Window, TabuleiroAtualizado, Linhas, Colunas),
     nl,
     (Resultado = 'empate' -> 
