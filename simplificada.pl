@@ -27,8 +27,14 @@ pede_jogada_simplificada(Window, Linhas, Colunas, Rodada, Tabuleiro) :-
             write('Computador jogando...'),
             sleep(1),
             jogada_simples_computador(Colunas, Linhas, TabuleiroAtualizado, NovoTabuleiroAtualizado, NovaLinhaJogada, NovaColunaJogada),
+            nl,
+            write('Computador jogou na linha: '),
+            write(NovaLinhaJogada),
+            write(' e na coluna: '),
+            write(NovaColunaJogada),
+            nl, nl,
+            verifica_se_acabou(Rodada, NovoTabuleiroAtualizado, Linhas, Colunas, NovaLinhaJogada, NovaColunaJogada, 'o', NovoResultado),
             NovaRodada is Rodada + 1,
-            verifica_se_acabou(NovaRodada, NovoTabuleiroAtualizado, Linhas, Colunas, NovaLinhaJogada, NovaColunaJogada, 'o', NovoResultado),
             imprime_tabuleiro(Window, NovoTabuleiroAtualizado, Linhas, Colunas),
             nl,
             (NovoResultado = 'empate' -> 
@@ -86,7 +92,7 @@ jogada_simples_computador_aux(Colunas, Linhas, Coluna, Linha, Tabuleiro, Heurist
 
         get_elemento(Tabuleiro, Linha, Coluna, 0, Resultado),
         (Resultado = 'true' ->
-            calcula_heuristica_simples(Colunas, Linhas, Coluna, Linha, Tabuleiro, NovaHeuristica),
+            calcula_heuristica_total_adjacente(Colunas, Linhas, Coluna, Linha, Tabuleiro, NovaHeuristica),
             (NovaHeuristica > Heuristica ->
                 jogada_simples_computador_aux(Colunas, Linhas, Coluna_1, Linhas, Tabuleiro, NovaHeuristica, Linha, Coluna, PosicaoLinha, PosicaoColuna)
             ;
@@ -110,15 +116,5 @@ jogada_simples_computador_aux(Colunas, Linhas, Coluna, Linha, Tabuleiro, Heurist
         )
     ).
     
-calcula_heuristica_simples(Colunas, Linhas, Coluna, Linha, Tabuleiro, Heuristica) :- 
-    calcula_heuristica_posicao(Linhas, Colunas, Linha - 1, Coluna - 1, Tabuleiro, Heuristica1),
-    calcula_heuristica_posicao(Linhas, Colunas, Linha - 1, Coluna, Tabuleiro, Heuristica2),
-    calcula_heuristica_posicao(Linhas, Colunas, Linha - 1, Coluna + 1, Tabuleiro, Heuristica3),
-    calcula_heuristica_posicao(Linhas, Colunas, Linha, Coluna - 1, Tabuleiro, Heuristica4),
-    calcula_heuristica_posicao(Linhas, Colunas, Linha, Coluna + 1, Tabuleiro, Heuristica5),
-    calcula_heuristica_posicao(Linhas, Colunas, Linha + 1, Coluna - 1, Tabuleiro, Heuristica6),
-    calcula_heuristica_posicao(Linhas, Colunas, Linha + 1, Coluna, Tabuleiro, Heuristica7),
-    calcula_heuristica_posicao(Linhas, Colunas, Linha + 1, Coluna + 1, Tabuleiro, Heuristica8),
-    Heuristica is Heuristica1 + Heuristica2 + Heuristica3 + Heuristica4 + Heuristica5 + Heuristica6 + Heuristica7 + Heuristica8.
 
     
