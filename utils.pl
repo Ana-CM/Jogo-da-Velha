@@ -9,7 +9,7 @@
 
 
 /**
- * Pega o elemento de uma determinada posição do tabuleiro.
+ * Valida elemento de uma determinada posição do tabuleiro.
  */
 get_elemento(Tabuleiro, Linha, Coluna, Simbolo, Resultado) :-
     IndiceLinha is Linha - 1,

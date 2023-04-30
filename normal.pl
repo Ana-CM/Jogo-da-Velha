@@ -4,7 +4,7 @@
  */
 
 /**
- * Predicados relacionados as jogadas do desafiante no modo Normal.
+ * Predicados relacionados as jogadas no modo Normal.
  */
 pede_jogada_normal(Window, Linhas, Colunas, Rodada, Tabuleiro) :-
     write('Digite a linha da jogada: '),
@@ -33,6 +33,9 @@ pede_jogada_normal(Window, Linhas, Colunas, Rodada, Tabuleiro) :-
         )
     ).
 
+/**
+ * Predicado relacionado a jogada do desafiante no modo Normal.
+ */
 jogada_normal_desafiante(Linhas, Colunas, Rodada, Linha, Coluna, Tabuleiro, TabuleiroAtualizado) :-  
     IndiceLinha is Linha - 1,
     length(LinhaPrefixo, IndiceLinha),
@@ -58,3 +61,6 @@ jogada_normal_desafiante(Linhas, Colunas, Rodada, Linha, Coluna, Tabuleiro, Tabu
     ).
         
         
+/**
+ * Predicado relacionado a jogada do computador no modo Normal.
+ */

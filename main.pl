@@ -17,7 +17,6 @@
 :- ensure_loaded(normal).
 :- ensure_loaded(simplificada).
 
-
 /**
  * Predicado principal do programa.
  */

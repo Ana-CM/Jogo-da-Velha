@@ -4,7 +4,7 @@
  */
 
 /**
- * Predicados relacionados as jogadas do desafiante no modo Simplificado.
+ * Predicados relacionados as jogadas do modo Simplificado.
  */
 pede_jogada_simplificada(Window, Linhas, Colunas, Rodada, Tabuleiro) :-
     write('Digite a coluna da jogada: '),
@@ -44,7 +44,10 @@ pede_jogada_simplificada(Window, Linhas, Colunas, Rodada, Tabuleiro) :-
             )
         )
     ).
-
+    
+/**
+ * Predicados relacionados a jogada do desafiante no modo Simplificado.
+ */
 jogada_simples_desafiante(Colunas, Rodada, Linhas, Coluna, Tabuleiro, LinhaJogada, TabuleiroAtualizado) :-
     jogada_simples_desafiante_aux(Colunas, Rodada, Linhas, Coluna, Tabuleiro, Linhas, LinhaJogada, TabuleiroAtualizado).
 
