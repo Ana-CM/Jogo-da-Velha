@@ -30,7 +30,7 @@ O modo de jogo simplificado é um modo no a jogada é feita escolhendo uma colun
 
 O modo de jogo normal é um modo no qual a jogada é feita escolhendo uma posição do tabuleiro, e a peça é colocada na posição escolhida.
 
-Em ambos os modos, a máquina sempre irá jogar com a peça `O` e o jogador sempre irá jogar com a peça `X`.
+Em ambos os modos, a máquina sempre irá jogar com a peça `O` e o jogador sempre irá jogar com a peça `X`, as jogadas são feitas alternadamente e o jogador dever escolher uma posição válida para jogar (uma posição que não esteja ocupada), digitando a coluna e/ou linha sendo valido apenas números inteiros maiores que 1.
 
 ## Terminando o jogo
 
